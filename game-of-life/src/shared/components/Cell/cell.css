@@ -1,0 +1,13 @@
+.cell {
+  height: 15px;
+  width: 15px;
+  border-radius: 60%;
+}
+
+.dead {
+  border: 1px solid grey;
+}
+
+.alive {
+  background-color: green;
+}

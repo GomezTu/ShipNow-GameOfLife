@@ -1,5 +1,5 @@
 import * as types from '../constants/actionTypes';
-import { makeGrid, makeRandomGrid, validateBoard } from '../shared/utils/utils';
+import { makeGrid, makeRandomGrid } from '../shared/utils/utils';
 
 export const toggleCell = (x, y) => ({
   type: types.TOGGLE_CELL,

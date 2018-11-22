@@ -4,8 +4,9 @@ const initialState = {
   timerId: null,
   generations: 0,
   error: '',
-  stateChange: false,
+  shouldRefresh: false,
   speed: 300,
+  completedGame: false,
 };
 
 export default initialState;

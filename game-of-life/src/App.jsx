@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import Alert from './shared/components/Alert/Alert';
 import ErrorBoundary from "./shared/components/ErrorBoundary/ErrorBoundary";
 import ButtonsBoard from "./shared/components/ButtonsBoard/ButtonsBoard";
 import Grid from "./shared/components/Grid/Grid";
@@ -11,11 +12,23 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
-    const { board, error } = this.props;
+    const { board, error, generations } = this.props;
 
     this.state = {
       board: board,
       error: error,
+      generations: generations
+    };
+
+    this.actions = {
+      'play': this.startGame,
+      'stop': (id) => this.stopGame(id),
+      'pause':(id) => this.pauseGame(id),
+      'seed': () => this.props.seedGame(defaultWidth, defaultHeight),
+      'step': this.props.takeStep,
+      'slow': this.slowDown,
+      'speed': this.speedUp,
+      'recover': this.recoverBoard,
     };
   }
   
@@ -24,12 +37,15 @@ class App extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { board, error, stateChange } = newProps;
-    if (_.isEqual(stateChange, this.props.stateChange) &&
-     (_.isEqual(error, this.props.error))) return;
+    const { board, error, shouldRefresh, completedGame, generations } = newProps;
+    if (
+      ((shouldRefresh === this.props.shouldRefresh) &&
+      _.isEqual(error, this.props.error)) || completedGame
+    ) return;
     this.setState({
-      board: board,
-      error: error,
+      board,
+      error,
+      generations,
     });
   }
 
@@ -50,13 +66,9 @@ class App extends Component {
     this.props.setStop(defaultWidth, defaultHeight);
   }
 
-  stepGame = () => {
-    this.props.takeStep();
-  }
-
   recoverBoard = () => {
-    let recValue = {};
     if (localStorage.getItem('board')) {
+      let recValue = {};
       recValue.board = JSON.parse(localStorage.getItem('board'));
       recValue.gens = parseInt(localStorage.getItem('gens'));
       this.props.recoverBoard(recValue);
@@ -78,30 +90,28 @@ class App extends Component {
   }
   
   render() {
-    const actions = {
-      'play': this.startGame,
-      'stop': (id) => this.stopGame(id),
-      'pause':(id) => this.pauseGame(id),
-      'seed': () => this.props.seedGame(defaultWidth, defaultHeight),
-      'step': () => this.props.takeStep,
-      'slow': this.slowDown,
-      'speed': this.speedUp,
-      'recover': this.recoverBoard,
-    };
-    
-    const { raiseError, generations, toggleCell, gameStatus, timerId } = this.props;
+    const { raiseError, toggleCell, gameStatus, timerId, completedGame } = this.props;
 
     return (
       <div className='col justify-content-center'>
         <ErrorBoundary error={this.state.error} raiseError={raiseError}>
-          <ButtonsBoard
-            buttons={buttons}
-            timerId={timerId}
-            gameStatus={gameStatus}
-            generations={generations}
-            actions={actions} />
-          <Grid board={this.state.board} toggleCell={toggleCell} />
-        </ErrorBoundary>
+        <ButtonsBoard
+          buttons={buttons}
+          timerId={timerId}
+          gameStatus={gameStatus}
+          generations={this.state.generations}
+          actions={this.actions} />
+        <Grid board={this.state.board} toggleCell={toggleCell} />
+      </ErrorBoundary>
+      {
+        completedGame && (
+          <Alert style={{
+            position: 'absolute',
+            top: '50%',
+            left: '25%',
+            }} message={`Game Finished on ${this.state.generations + 1} generations`}/>
+        )
+      }
       </div>
     );
   }

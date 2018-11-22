@@ -19,7 +19,7 @@ const ButtonsBoard = (props) => {
   return(
     <div className='row align-items-center'
       style={{ marginBottom: '20px' }}>
-      <div className='col-7'>
+      <div>
         {buttons}
       </div>
       <div className='col-2 float-right'>

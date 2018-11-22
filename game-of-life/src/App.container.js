@@ -18,9 +18,10 @@ const mapStateToProps = (state) => {
     gameStatus: state.app.gameStatus,
     generations: state.app.generations,
     board: state.app.board,
-    stateChange: state.app.stateChange,
+    shouldRefresh: state.app.shouldRefresh,
     timerId: state.app.timerId,
     speed: state.app.speed,
+    completedGame: state.app.completedGame,
   });
 };
 

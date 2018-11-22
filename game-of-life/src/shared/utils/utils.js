@@ -38,7 +38,7 @@ export const advanceStep = (grid = []) => {
     return newBoard;
 };
 
-const calculateNeighbours = (x, y, grid) => {
+export const calculateNeighbours = (x, y, grid) => {
   const gridHeight = grid.length;
   const gridWidth = grid[0].length;
 
@@ -67,12 +67,11 @@ const calculateNeighbours = (x, y, grid) => {
 };
 
 export const validateBoard = (grid) => {
-  const isValid = grid.reduce((acum, row) => {
-    acum = row.reduce((validRow, c) => {
-      validRow = validRow || c;
-      return validRow;
-    });
-    return acum;
+  let arr = [];
+
+  grid.map(r => {
+    arr.push(r.reduce((sum, c) => sum || c));
   });
-  return isValid;
+
+  return arr.reduce((sum, r) => sum || r);
 }

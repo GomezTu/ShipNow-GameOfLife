@@ -104,6 +104,7 @@ class App extends Component {
         <Grid board={this.state.board} toggleCell={toggleCell} />
       </ErrorBoundary>
       {
+        //Decided for a simple and 'dumb' component to notify the user the end of the game
         completedGame && (
           <Alert style={{
             position: 'absolute',

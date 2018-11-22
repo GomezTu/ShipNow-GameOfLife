@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+//A simple yet somehow elegant way to handle errors.
 export class ErrorBoundary extends React.Component {
 	componentDidCatch(error, info) {
 		const { raiseError } = this.props;

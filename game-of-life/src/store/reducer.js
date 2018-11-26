@@ -1,6 +1,6 @@
 import initialState from "./initialState";
 import * as types from '../constants/actionTypes';
-import { advanceStep, validateBoard } from '../shared/utils/utils';
+import { advanceStep, validateBoard, deepCopyBoard } from '../shared/utils/utils';
 
 export default (state = initialState, action) => {
 
@@ -44,7 +44,7 @@ export default (state = initialState, action) => {
       return { ...state, speed: action.payload };
     case types.TOGGLE_CELL:
       clearInterval(state.timerId);
-      newBoard = state.board;
+      newBoard = deepCopyBoard(state.board);
       newBoard[action.payload.x][action.payload.y] = !newBoard[action.payload.x][action.payload.y];
       if (state.gameStatus !== 'STOP') localStorage.setItem('board', JSON.stringify(newBoard));
       if (state.gameStatus === 'STOP') localStorage.setItem('gens', JSON.stringify(0));

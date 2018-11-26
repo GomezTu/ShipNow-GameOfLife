@@ -75,3 +75,8 @@ export const validateBoard = (grid) => {
 
   return arr.reduce((sum, r) => sum || r);
 }
+
+export const deepCopyBoard = (grid) => {
+  let newBoard = grid.map((r => r.slice()));
+  return newBoard;
+}
